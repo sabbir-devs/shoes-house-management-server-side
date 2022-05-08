@@ -8,8 +8,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 
-// user name: warehouse1;
-// password : l9XpzbSczUMLzNAR;
 
 // for meddleware
 app.use(cors());
@@ -19,8 +17,6 @@ app.get('/', (req, res) => {
     res.send('Hello from server')
 })
 
-// stackoverflow anwser: https://stackoverflow.com/questions/72157598/is-their-storage-limit-in-github-repository-storage/72157616#72157616s
-    
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@warehouseproduct.bux0i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
