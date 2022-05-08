@@ -34,7 +34,25 @@ async function run() {
         const result = await cursor.toArray()
         res.json(result)
     })
-    
+    // single product
+    app.get('/shoes/:id', async(req, res) => {
+      const id = req.params.id;
+      const quary = {_id: ObjectId(id)};
+      const result = await shoesCollection.findOne(quary);
+      res.json(result)
+    })
+    app.put('/shoes/:id', async(req, res) => {
+      const quantity = req.body.totalQuantity;
+      const sold = req.body.totalSold;
+      const id = req.body.id;
+      const query = {_id: ObjectId(id)}
+      const options = { upsert: true};
+      const updateDoc = {
+        $set: {quantity: quantity, sold: sold},
+      }
+      const result = await shoesCollection.updateOne(query, updateDoc, options);
+      res.json(result)
+    })
     // delete a product
     app.delete('/shoes/:id', async(req, res) => {
       const id = req.params.id;
