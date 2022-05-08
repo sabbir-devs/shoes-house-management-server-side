@@ -18,13 +18,29 @@ app.get('/', (req, res) => {
 
     
 
-const uri = "mongodb+srv://warehouse1:l9XpzbSczUMLzNAR@warehouseproduct.bux0i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = `mongodb+srv://warehouse1:l9XpzbSczUMLzNAR@warehouseproduct.bux0i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  console.log('db connected')
-  client.close();
-});
+async function run() {
+  try{
+    await client.connect();
+    const shoesCollection = client.db("warehouseProduct").collection("shoes");
+    app.get('/shoes', async(req, res) => {
+        const quary = {};
+        const cursor = shoesCollection.find(quary)
+        const result = await cursor.toArray()
+        res.json(result)
+    })
+  }
+  finally{
+    // await client.close();
+  }
+}
+run().catch(console.dir)
+// client.connect(err => {
+//   const collection = client.db("warehouseProduct").collection("shoes");
+//   console.log('db connected')
+//   client.close();
+// });
 
 
 
