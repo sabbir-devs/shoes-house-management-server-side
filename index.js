@@ -1,8 +1,10 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const port = process.env.PORT || 5000
+const ObjectId = require('mongodb').ObjectId;
+
+const app = express();
+const port = process.env.PORT || 5000;
 
 
 // user name: warehouse1;
@@ -16,6 +18,7 @@ app.get('/', (req, res) => {
     res.send('Hello from server')
 })
 
+// stackoverflow anwser: https://stackoverflow.com/questions/72157598/is-their-storage-limit-in-github-repository-storage/72157616#72157616s
     
 
 const uri = `mongodb+srv://warehouse1:l9XpzbSczUMLzNAR@warehouseproduct.bux0i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -24,25 +27,27 @@ async function run() {
   try{
     await client.connect();
     const shoesCollection = client.db("warehouseProduct").collection("shoes");
+    // show product 
     app.get('/shoes', async(req, res) => {
-        const quary = {};
-        const cursor = shoesCollection.find(quary)
+        const query = {};
+        const cursor = shoesCollection.find(query)
         const result = await cursor.toArray()
         res.json(result)
+    })
+    
+    // delete a product
+    app.delete('/shoes/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)};
+      const result = await shoesCollection.deleteOne(query)
+      res.json(result)
     })
   }
   finally{
     // await client.close();
   }
 }
-run().catch(console.dir)
-// client.connect(err => {
-//   const collection = client.db("warehouseProduct").collection("shoes");
-//   console.log('db connected')
-//   client.close();
-// });
-
-
+run().catch(console.dir);
 
 app.listen(port, () => {
     console.log('server is running')
