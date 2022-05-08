@@ -48,7 +48,7 @@ async function run() {
       const query = {_id: ObjectId(id)}
       const options = { upsert: true};
       const updateDoc = {
-        $set: {quantity: quantity, sold: sold},
+        $set: {quantity: quantity, solld: sold},
       }
       const result = await shoesCollection.updateOne(query, updateDoc, options);
       res.json(result)
